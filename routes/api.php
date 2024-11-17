@@ -11,25 +11,23 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-// Rutas de entidad Cliehte
+// Rutas de entidad Cliente
 Route::get("/clientes", [ClienteController::class, 'selectClientes']);
 Route::get("/clientes/{id}", [ClienteController::class, 'findCliente']);
 Route::post("/clientes", [ClienteController::class, 'addCliente']);
 Route::put("/clientes/{id}", [ClienteController::class, 'updateCliente']);
 Route::delete("/clientes/{id}", [ClienteController::class, 'deleteCliente']);
 
-// Rutas de entidad RecursoHumano
+// Rutas de entidad RecursosHumanos
+Route::get('/recurso-humanos', [RecursoHumanoController::class, 'index']); 
+Route::get('/recurso-humanos/{id}', [RecursoHumanoController::class, 'show']);
+Route::post('/recurso-humanos', [RecursoHumanoController::class, 'store']);
+Route::put('/recurso-humanos/{id}', [RecursoHumanoController::class, 'update']);
+Route::delete('/recurso-humano/{id}', [RecursoHumanoController::class, 'destroy']);
 
-Route::get('/recurso-humano', [RecursoHumanoController::class, 'index']); // Listar todos los empleados
-Route::get('/recurso-humano/{id}', [RecursoHumanoController::class, 'show']); // Mostrar un empleado específico
-Route::post('/recurso-humano', [RecursoHumanoController::class, 'store']); // Crear un nuevo empleado
-Route::put('/recurso-humano/{id}', [RecursoHumanoController::class, 'update']); // Actualizar un empleado
-Route::delete('/recurso-humano/{id}', [RecursoHumanoController::class, 'destroy']); // Eliminar un empleado
-
-// Rutas de entidad maquinaria 
-
-Route::get('/maquinaria', [MaquinariaController::class, 'index']); // Obtener lista de toda la maquinaria
-Route::get('/maquinaria/{id}', [MaquinariaController::class, 'show']); // Obtener detalles de una maquinaria específica
-Route::post('/maquinaria', [MaquinariaController::class, 'store']); // Crear una nueva maquinaria
-Route::put('/maquinaria/{id}', [MaquinariaController::class, 'update']); // Actualizar una maquinaria existente
-Route::delete('/maquinaria/{id}', [MaquinariaController::class, 'destroy']); // Eliminar una maquinaria
+// Rutas de entidad Maquinaria 
+Route::get('/maquinarias', [MaquinariaController::class, 'selectMaquinarias']);
+Route::get('/maquinarias/{id}', [MaquinariaController::class, 'findMaquinaria']);
+Route::post('/maquinarias', [MaquinariaController::class, 'addMaquinaria']);
+Route::put('/maquinarias/{id}', [MaquinariaController::class, 'updateMaquinaria']);
+Route::delete('/maquinarias/{id}', [MaquinariaController::class, 'deleteMaquinaria']);

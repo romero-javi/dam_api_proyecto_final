@@ -12,48 +12,45 @@ class ClienteController extends Controller
     public function selectClientes() {
         $clientes = Cliente::all();
 
-        if($clientes->count() > 0) {
-            return response() -> json([
-                    'code' => 200,
-                    'data' => $clientes
-                ], 200);
-        } else {
+        if($clientes->count() == 0) {
             return response()->json([
                 'code' => 404,
-                'data' => 'No hay registros'
+                'data' => 'No existen clientes'
             ], 404);
-        }
+        } 
+
+        return response() -> json([
+            'code' => 200,
+            'data' => $clientes
+        ], 200);
     }
 
     public function findCliente($id) {
         $cliente = Cliente::find($id);
-        if($cliente) {
+
+        if(!$cliente) {
             return response()->json([
-                'code' => 200,
-                'data' => $cliente
-            ], 200);
+                'code' => 404,
+                'data' => 'Cliente no encontrado'
+            ], 404);
         }
 
         return response()->json([
-            'code' => 404,
-            'data' => 'Cliente no encotrado'
-        ], 404);
+            'code' => 200,
+            'data' => $cliente
+        ], 200);
     }
 
     public function addCliente(Request $request) {
         $validacion = Validator::make($request->all(), [
-            'Nombre' => 'required|string|max:255',
-            'Contacto' => 'required|string|max:255',
-            'Direccion' => 'required|string|max:255',
-            'Estado' => 'required',
+            'nombre' => 'required|string|max:255',
+            'contacto' => 'required|string|max:255',
+            'direccion' => 'required|string|max:255',
+            'estado' => 'in:Activo,Inactivo',
+            'fecha_registro' => 'required|date'
         ]);
 
-        if($validacion->fails()) {
-            return response()->json([
-                'code' => 400,
-                'data' => $validacion->messages()
-            ], 400);
-        } else {
+        if(!$validacion->fails()) {
             $cliente = Cliente::create($request->all());
 
             return response()->json([
@@ -61,14 +58,20 @@ class ClienteController extends Controller
                 'data' => "Cliente agregado"
             ], 200);
         }
+        
+        return response()->json([
+            'code' => 400,
+            'data' => $validacion->messages()
+        ], 400);
     }
 
     public function updateCliente(Request $request, $id) {
         $validacion = Validator::make($request->all(), [
-            'Nombre' => 'required',
-            'Contacto' => 'required',
-            'Direccion' => 'required',
-            'Estado' => 'required',
+            'nombre' => 'required|string|max:255',
+            'contacto' => 'required|string|max:255',
+            'direccion' => 'required|string|max:255',
+            'estado' => 'in:activo,inactivo',
+            'fecha_registro' => 'required|date'
         ]);
 
         if($validacion->fails()) {
@@ -80,40 +83,42 @@ class ClienteController extends Controller
 
         $cliente = Cliente::find($id);
 
-        if($cliente) {
-            $cliente->update([
-                'Nombre' => $request->nombre,
-                'Contacto' => $request->contacto,
-                'Direccion' => $request->direccion,
-                'Estado' => $request->estado,
-            ]);
+        if(!$cliente) {
             return response()->json([
-                'code' => 200,
-                'data' => 'Cliente actualizado'
-            ], 200);
+                'code' => 404,
+                'data' => 'Cliente no encontrado'
+            ], 404);
         }
 
+        $cliente->update([
+            'nombre' => $request->nombre,
+            'contacto' => $request->contacto,
+            'direccion' => $request->direccion,
+            'estado' => $request->estado,
+            'fecha_ingreso' => $request->fecha_ingreso
+        ]);
         return response()->json([
-            'code' => 404,
-            'data' => 'Cliente no encotrado'
-        ], 404);
+            'code' => 200,
+            'data' => 'Cliente actualizado'
+        ], 200);
+
     }
 
     public function deleteCliente($id) {
         $cliente =  Cliente::find($id);
 
-        if($cliente) {
-            $cliente->delete();
-
+        if(!$cliente) {
             return response()->json([
-                'code' => 200,
-                'data' => 'Cliente eliminado'
-            ], 200);
+                'code' => 404,
+                'data' => 'Cliente no encontrado'
+            ], 404);
         }
+        
+        $cliente->delete();
 
         return response()->json([
-            'code' => 404,
-            'data' => 'No hay registros'
-        ], 404);
+            'code' => 200,
+            'data' => 'Cliente eliminado'
+        ], 200);
     }
 }

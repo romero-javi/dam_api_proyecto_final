@@ -9,15 +9,19 @@ class Cliente extends Model
 {
     use HasFactory;
 
-    protected $table = 'clientes';
+    protected $table = 'cliente';
+    protected $primaryKey = 'id_cliente';
 
     protected $fillable = [
-        'Nombre',
-        'Contacto',
-        'Direccion',
-        'Estado'
+        'nombre',
+        'contacto',
+        'direccion',
+        'estado',
+        'fecha_registro',
     ];
 
-    const CREATED_AT = 'fecha_creacion';
-    const UPDATED_AT = 'fecha_actualizacion';
+    public function proyectos()
+    {
+        return $this->hasMany(Proyecto::class, 'id_cliente');
+    }
 }
