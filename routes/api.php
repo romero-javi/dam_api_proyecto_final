@@ -4,6 +4,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\GastoController;
 use App\Http\Controllers\RecursoHumanoController;
 use App\Http\Controllers\MaquinariaController;
+use App\Http\Controllers\MateriaPrimaController;
 use App\Http\Controllers\ProyectoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -49,3 +50,11 @@ Route::post('/gastos', [GastoController::class, 'addGasto']);
 Route::get('/gastos/{id}/proyecto', [GastoController::class, 'getProyecto']);
 Route::put('/gastos/{id}', [GastoController::class, 'updateGasto']);
 Route::delete('/gastos/{id}', [GastoController::class, 'deleteGasto']);
+
+// Rutas de entidad Materia Prima 
+Route::get('/materias-primas', [MateriaPrimaController::class, 'selectMateriasPrimas']);
+Route::get('/materias-primas/{id}', [MateriaPrimaController::class, 'findMateriaPrima']);
+Route::post('/materias-primas', [MateriaPrimaController::class, 'addMateriaPrima']);
+Route::get('/materias-primas/{id}/proyecto', [MateriaPrimaController::class, 'getProyecto']);
+Route::put('/materias-primas/{id}', [MateriaPrimaController::class, 'updateMateriaPrima']);
+Route::delete('/materias-primas/{id}', [MateriaPrimaController::class, 'deleteMateriaPrima']);
