@@ -3,7 +3,7 @@
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\RecursoHumanoController;
 use App\Http\Controllers\MaquinariaController;
-
+use App\Http\Controllers\ProyectoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,11 +19,19 @@ Route::put("/clientes/{id}", [ClienteController::class, 'updateCliente']);
 Route::delete("/clientes/{id}", [ClienteController::class, 'deleteCliente']);
 
 // Rutas de entidad RecursosHumanos
-Route::get('/recurso-humanos', [RecursoHumanoController::class, 'index']); 
-Route::get('/recurso-humanos/{id}', [RecursoHumanoController::class, 'show']);
-Route::post('/recurso-humanos', [RecursoHumanoController::class, 'store']);
-Route::put('/recurso-humanos/{id}', [RecursoHumanoController::class, 'update']);
-Route::delete('/recurso-humano/{id}', [RecursoHumanoController::class, 'destroy']);
+Route::get('/recursos-humanos', [RecursoHumanoController::class, 'index']); 
+Route::get('/recursos-humanos/{id}', [RecursoHumanoController::class, 'show']);
+Route::post('/recursos-humanos', [RecursoHumanoController::class, 'store']);
+Route::put('/recursos-humanos/{id}', [RecursoHumanoController::class, 'update']);
+Route::delete('/recursos-humanos/{id}', [RecursoHumanoController::class, 'destroy']);
+
+// Rutas de entidad Proyecto
+Route::get("/proyectos", [ProyectoController::class, 'selectProyectos']);
+Route::get("/proyectos/{id}", [ProyectoController::class, 'findProyecto']);
+Route::get("/proyectos/{id}/cliente", [ProyectoController::class, 'getcliente']);
+Route::post("/proyectos", [ProyectoController::class, 'addProyecto']);
+Route::put("/proyectos/{id}", [ProyectoController::class, 'updateProyecto']);
+Route::delete("/proyectos/{id}", [ProyectoController::class, 'deleteProyecto']);
 
 // Rutas de entidad Maquinaria 
 Route::get('/maquinarias', [MaquinariaController::class, 'selectMaquinarias']);

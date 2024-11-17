@@ -70,7 +70,7 @@ class ClienteController extends Controller
             'nombre' => 'required|string|max:255',
             'contacto' => 'required|string|max:255',
             'direccion' => 'required|string|max:255',
-            'estado' => 'in:activo,inactivo',
+            'estado' => 'required|in:activo,inactivo',
             'fecha_registro' => 'required|date'
         ]);
 
