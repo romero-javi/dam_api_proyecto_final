@@ -9,16 +9,14 @@ class RecursoHumano extends Model
 {
     use HasFactory;
 
-    // Definir los campos que pueden ser llenados de manera masiva (mass assignable)
+    protected $table = 'recursos_humanos';
+    protected $primaryKey = 'id_recurso_humano';
+
     protected $fillable = [
         'nombre',
         'rol',
         'especializacion',
         'estado',
-        'fecha_registro',
+        'fecha_ingreso',
     ];
-
-    // Si quieres personalizar los nombres de las fechas
-    const CREATED_AT = 'fecha_creacion';
-    const UPDATED_AT = 'fecha_actualizacion';
 }

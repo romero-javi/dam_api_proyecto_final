@@ -12,11 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('recursos_humanos', function (Blueprint $table) {
-            $table->id(); // ID único para cada recurso humano
-            $table->string('nombre'); // Nombre del empleado
-            $table->string('puesto'); // Puesto o cargo del empleado
-            $table->date('fecha_ingreso'); // Fecha de ingreso del empleado
-            $table->timestamps(); // Crea las columnas created_at y updated_at
+            $table->id('id_recurso_humano');
+            $table->string('nombre');
+            $table->string('rol');
+            $table->string('especializacion');
+            $table->date('fecha_ingreso');
+            $table->enum('estado', ['Activo', 'Inactivo'])->default('Activo');
+            $table->timestamps();
         });
     }
 

@@ -19,11 +19,11 @@ Route::put("/clientes/{id}", [ClienteController::class, 'updateCliente']);
 Route::delete("/clientes/{id}", [ClienteController::class, 'deleteCliente']);
 
 // Rutas de entidad RecursosHumanos
-Route::get('/recursos-humanos', [RecursoHumanoController::class, 'index']); 
-Route::get('/recursos-humanos/{id}', [RecursoHumanoController::class, 'show']);
-Route::post('/recursos-humanos', [RecursoHumanoController::class, 'store']);
-Route::put('/recursos-humanos/{id}', [RecursoHumanoController::class, 'update']);
-Route::delete('/recursos-humanos/{id}', [RecursoHumanoController::class, 'destroy']);
+Route::get('/recursos-humanos', [RecursoHumanoController::class, 'selectRecursosHumanos']); 
+Route::get('/recursos-humanos/{id}', [RecursoHumanoController::class, 'findRecursoHumano']);
+Route::post('/recursos-humanos', [RecursoHumanoController::class, 'addRecursoHumano']);
+Route::put('/recursos-humanos/{id}', [RecursoHumanoController::class, 'updateRecursoHumano']);
+Route::delete('/recursos-humanos/{id}', [RecursoHumanoController::class, 'deleteRecursoHumano']);
 
 // Rutas de entidad Proyecto
 Route::get("/proyectos", [ProyectoController::class, 'selectProyectos']);

@@ -4,78 +4,120 @@ namespace App\Http\Controllers;
 
 use App\Models\RecursoHumano;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class RecursoHumanoController extends Controller
 {
-    // Mostrar todos los recursos
-    public function index()
-    {
-        // Obtener todos los recursos de la base de datos
-        $recursos = RecursoHumano::all();
-        return response()->json($recursos);
+    public function selectRecursosHumanos() {
+        $recursos_humanos = RecursoHumano::all();
+
+        if($recursos_humanos->count() == 0) {
+            return response()->json([
+                'code' => 404,
+                'data' => 'No existen recursos humanos'
+            ], 404);
+        } 
+
+        return response() -> json([
+            'code' => 200,
+            'data' => $recursos_humanos
+        ], 200);
     }
 
-    // Crear un nuevo recurso
-    public function store(Request $request)
-    {
-        // Validar los datos del request
-        $request->validate([
+    public function findRecursoHumano($id) {
+        $recurso_humano = RecursoHumano::find($id);
+
+        if(!$recurso_humano) {
+            return response()->json([
+                'code' => 404,
+                'data' => 'Recurso Humano no encontrado'
+            ], 404);
+        }
+
+        return response()->json([
+            'code' => 200,
+            'data' => $recurso_humano
+        ], 200);
+    }
+
+    public function addRecursoHumano(Request $request) {
+        $validacion = Validator::make($request->all(), [
             'nombre' => 'required|string|max:255',
             'rol' => 'required|string|max:255',
             'especializacion' => 'required|string|max:255',
-            'estado' => 'required|string|max:255',
-            'fecha_registro' => 'required|date',
+            'fecha_ingreso' => 'required|date',
+            'estado' => 'in:Activo,Inactivo'
         ]);
 
-        // Crear el recurso en la base de datos
-        $recurso = RecursoHumano::create($request->all());
+        if(!$validacion->fails()) {
+            $recurso_humano = RecursoHumano::create($request->all());
 
-        // Retornar una respuesta con el recurso creado
-        return response()->json($recurso, 201); // 201 es el código de respuesta para "creado"
-    }
-
-    // Mostrar un recurso específico
-    public function show($id)
-    {
-        // Buscar el recurso por su ID
-        $recurso = RecursoHumano::findOrFail($id);
+            return response()->json([
+                'code' => 200,
+                'data' => "Recurso Humano agregado"
+            ], 200);
+        }
         
-        // Retornar una respuesta con los datos del recurso
-        return response()->json($recurso);
+        return response()->json([
+            'code' => 400,
+            'data' => $validacion->messages()
+        ], 400);
     }
 
-    // Actualizar un recurso
-    public function update(Request $request, $id)
-    {
-        // Validar los datos del request
-        $request->validate([
-            'nombre' => 'sometimes|string|max:255',
-            'rol' => 'sometimes|string|max:255',
-            'especializacion' => 'sometimes|string|max:255',
-            'estado' => 'sometimes|string|max:255',
-            'fecha_registro' => 'sometimes|date',
+    public function updateRecursoHumano(Request $request, $id) {
+        $validacion = Validator::make($request->all(), [
+            'nombre' => 'required|string|max:255',
+            'rol' => 'required|string|max:255',
+            'especializacion' => 'required|string|max:255',
+            'fecha_ingreso' => 'required|date',
+            'estado' => 'in:Activo,Inactivo'
         ]);
 
-        // Buscar el recurso en la base de datos
-        $recurso = RecursoHumano::findOrFail($id);
+        if($validacion->fails()) {
+            return response()->json([
+                'code' => 400,
+                'data' => $validacion->messages()
+            ], 400);
+        }
 
-        // Actualizar el recurso con los datos proporcionados
-        $recurso->update($request->all());
+        $recurso_humano = RecursoHumano::find($id);
 
-        // Retornar una respuesta con el recurso actualizado
-        return response()->json($recurso);
+        if(!$recurso_humano) {
+            return response()->json([
+                'code' => 404,
+                'data' => 'Recurso Humano no encontrado'
+            ], 404);
+        }
+
+        $recurso_humano->update([
+            'nombre' => $request->nombre,
+            'rol' => $request->rol,
+            'especializacion' => $request->especializacion,
+            'fecha_ingreso' => $request->fecha_ingreso,
+            'estado' => $request->estado
+        ]);
+        return response()->json([
+            'code' => 200,
+            'data' => 'Recurso Humano actualizado'
+        ], 200);
+
     }
 
-    // Eliminar un recurso
-    public function destroy($id)
-    {
-        // Buscar el recurso en la base de datos
-        $recurso = RecursoHumano::findOrFail($id);
-        
-        // Eliminar el recurso
-        $recurso->delete();
+    public function deleteRecursoHumano($id) {
+        $recurso_humano =  RecursoHumano::find($id);
 
-        // Retornar una respuesta de éxito
-        return response()->json(['message' => 'Recurso eliminado con éxito']);
+        if(!$recurso_humano) {
+            return response()->json([
+                'code' => 404,
+                'data' => 'Recurso Humano no encontrado'
+            ], 404);
+        }
+        
+        $recurso_humano->delete();
+
+        return response()->json([
+            'code' => 200,
+            'data' => 'Recurso Humano eliminado'
+        ], 200);
     }
 }
