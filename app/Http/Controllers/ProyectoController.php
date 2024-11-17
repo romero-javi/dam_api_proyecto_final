@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Gasto;
 use App\Models\Proyecto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -157,6 +158,24 @@ class ProyectoController extends Controller
         return response()->json([
             'code' => 200,
             'data' => 'Proyecto eliminado'
+        ], 200);
+    }
+
+    public function getGastos($id) {
+        $proyecto = Proyecto::find($id);
+
+        if(!$proyecto) {
+            return response()->json([
+                'code' => 404,
+                'data' => 'Proyecto no encontrado'
+            ], 404);
+        }
+
+        $gastos_del_proyecto = $proyecto->gastos;
+
+        return response()->json([
+            'code' => 200,
+            'data' => $gastos_del_proyecto
         ], 200);
     }
 }

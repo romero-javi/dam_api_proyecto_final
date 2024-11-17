@@ -33,4 +33,9 @@ class Proyecto extends Model
     {
         return $this->belongsTo(Cliente::class, 'id_cliente');
     }
+
+    public function gastos()
+    {
+        return $this->hasMany(Gasto::class, 'id_proyecto');
+    }
 }

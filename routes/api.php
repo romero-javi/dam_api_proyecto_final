@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\GastoController;
 use App\Http\Controllers\RecursoHumanoController;
 use App\Http\Controllers\MaquinariaController;
 use App\Http\Controllers\ProyectoController;
@@ -29,6 +30,7 @@ Route::delete('/recursos-humanos/{id}', [RecursoHumanoController::class, 'delete
 Route::get("/proyectos", [ProyectoController::class, 'selectProyectos']);
 Route::get("/proyectos/{id}", [ProyectoController::class, 'findProyecto']);
 Route::get("/proyectos/{id}/cliente", [ProyectoController::class, 'getcliente']);
+Route::get("/proyectos/{id}/gastos", [ProyectoController::class, 'getGastos']);
 Route::post("/proyectos", [ProyectoController::class, 'addProyecto']);
 Route::put("/proyectos/{id}", [ProyectoController::class, 'updateProyecto']);
 Route::delete("/proyectos/{id}", [ProyectoController::class, 'deleteProyecto']);
@@ -39,3 +41,11 @@ Route::get('/maquinarias/{id}', [MaquinariaController::class, 'findMaquinaria'])
 Route::post('/maquinarias', [MaquinariaController::class, 'addMaquinaria']);
 Route::put('/maquinarias/{id}', [MaquinariaController::class, 'updateMaquinaria']);
 Route::delete('/maquinarias/{id}', [MaquinariaController::class, 'deleteMaquinaria']);
+
+// Rutas de entidad Gasto 
+Route::get('/gastos', [GastoController::class, 'selectGastos']);
+Route::get('/gastos/{id}', [GastoController::class, 'findGasto']);
+Route::post('/gastos', [GastoController::class, 'addGasto']);
+Route::get('/gastos/{id}/proyecto', [GastoController::class, 'getProyecto']);
+Route::put('/gastos/{id}', [GastoController::class, 'updateGasto']);
+Route::delete('/gastos/{id}', [GastoController::class, 'deleteGasto']);
