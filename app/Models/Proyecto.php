@@ -33,9 +33,4 @@ class Proyecto extends Model
     {
         return $this->belongsTo(Cliente::class, 'id_cliente');
     }
-
-    public function maquinarias()
-    {
-        return $this->hasMany(Maquinaria::class, 'id_proyecto');
-    }
 }
