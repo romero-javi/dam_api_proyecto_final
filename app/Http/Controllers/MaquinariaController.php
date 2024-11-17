@@ -4,73 +4,123 @@ namespace App\Http\Controllers;
 
 use App\Models\Maquinaria;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class MaquinariaController extends Controller
 {
-    // Mostrar todas las maquinarias
-    public function index()
+    public function selectMaquinarias()
     {
         $maquinarias = Maquinaria::all();
-        return response()->json($maquinarias);
+
+        if($maquinarias->count() == 0) {
+            return response() -> json([
+                'code' => 404,
+                'data' => 'No existen Maquinarias'
+            ], 404);
+        }
+        
+        return response() -> json([
+            'code' => 200,
+            'data' => $maquinarias
+        ], 200);
     }
 
-    // Crear una nueva maquinaria
-    public function store(Request $request)
-    {
-        // Validar los datos de entrada
-        $request->validate([
+    public function findMaquinaria($id) {
+        $maquinaria = Maquinaria::find($id);
+
+        if(!$maquinaria) {
+            return response()->json([
+                'code' => 404,
+                'data' => 'Maquinaria no encontrada'
+            ], 404);
+        }
+
+        return response()->json([
+            'code' => 200,
+            'data' => $maquinaria
+        ], 200);
+    }
+
+    public function addMaquinaria(Request $request) {
+        $validacion = Validator::make($request->all(), [
             'nombre' => 'required|string|max:255',
-            'estado' => 'required|string|max:255',
+            'estado' => 'in:Disponible,En mantenimiento,Asignada',
             'fecha_ultimo_mantenimiento' => 'required|date',
-            'costo_diario' => 'required|numeric',
-            'especializacion' => 'required|string|max:255',
-            'fecha_registro' => 'required|date',
-            'ID_Proyecto' => 'required|exists:proyectos,id', // Asegúrate de que el ID de proyecto exista
+            'fecha_adquisicion' => 'required|date',
+            'tipo' => 'required|string|max:255',
+            'costo_diario' => 'required|numeric'
         ]);
 
-        // Crear la nueva maquinaria
-        $maquinaria = Maquinaria::create($request->all());
+        if(!$validacion->fails()) {
+            $cliente = Maquinaria::create($request->all());
 
-        return response()->json($maquinaria, 201); // Devuelve la maquinaria creada con código 201
+            return response()->json([
+                'code' => 200,
+                'data' => "Maquinaria agregada"
+            ], 200);
+        }
+        
+        return response()->json([
+            'code' => 400,
+            'data' => $validacion->messages()
+        ], 400);
     }
 
-    // Mostrar una maquinaria específica
-    public function show($id)
-    {
-        $maquinaria = Maquinaria::findOrFail($id); // Buscar maquinaria por ID
-        return response()->json($maquinaria);
-    }
-
-    // Actualizar una maquinaria existente
-    public function update(Request $request, $id)
-    {
-        // Validar los datos de entrada
-        $request->validate([
-            'nombre' => 'sometimes|string|max:255',
-            'estado' => 'sometimes|string|max:255',
-            'fecha_ultimo_mantenimiento' => 'sometimes|date',
-            'costo_diario' => 'sometimes|numeric',
-            'especializacion' => 'sometimes|string|max:255',
-            'fecha_registro' => 'sometimes|date',
-            'ID_Proyecto' => 'sometimes|exists:proyectos,id', // Asegúrate de que el ID de proyecto exista
+    public function updateMaquinaria(Request $request, $id) {
+        $validacion = Validator::make($request->all(), [
+            'nombre' => 'required|string|max:255',
+            'estado' => 'required|in:Disponible,En mantenimiento,Asignada',
+            'fecha_ultimo_mantenimiento' => 'required|date',
+            'fecha_adquisicion' => 'required|date',
+            'tipo' => 'required|string|max:255',
+            'costo_diario' => 'required|numeric'
         ]);
 
-        // Buscar la maquinaria
-        $maquinaria = Maquinaria::findOrFail($id);
+        if($validacion->fails()) {
+            return response()->json([
+                'code' => 400,
+                'data' => $validacion->messages()
+            ], 400);
+        }
 
-        // Actualizar la maquinaria
-        $maquinaria->update($request->all());
+        $maquinaria = Maquinaria::find($id);
 
-        return response()->json($maquinaria);
+        if(!$maquinaria) {
+            return response()->json([
+                'code' => 404,
+                'data' => 'Maquinaria no encontrada'
+            ], 404);
+        }
+
+        $maquinaria->update([
+            'nombre' => $request->nombre,
+            'contacto' => $request->contacto,
+            'direccion' => $request->direccion,
+            'estado' => $request->estado,
+            'fecha_ingreso' => $request->fecha_ingreso
+        ]);
+        return response()->json([
+            'code' => 200,
+            'data' => 'Maquinaria actualizada'
+        ], 200);
+
     }
 
-    // Eliminar una maquinaria
-    public function destroy($id)
-    {
-        // Buscar y eliminar la maquinaria
-        $maquinaria = Maquinaria::findOrFail($id);
+    public function deleteMaquinaria($id) {
+        $maquinaria =  Maquinaria::find($id);
+
+        if(!$maquinaria) {
+            return response()->json([
+                'code' => 404,
+                'data' => 'Maquinaria no encontrada'
+            ], 404);
+        }
+        
         $maquinaria->delete();
 
-        return response()->json(['message' => 'Maquinaria eliminada con éxito']);
+        return response()->json([
+            'code' => 200,
+            'data' => 'Maquinaria eliminada'
+        ], 200);
     }
 }
