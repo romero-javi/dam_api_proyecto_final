@@ -38,4 +38,9 @@ class Proyecto extends Model
     {
         return $this->hasMany(Gasto::class, 'id_proyecto');
     }
+
+    public function materias_primas()
+    {
+        return $this->belongsToMany(MateriaPrima::class);
+    }
 }

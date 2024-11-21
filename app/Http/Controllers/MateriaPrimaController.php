@@ -45,7 +45,7 @@ class MateriaPrimaController extends Controller
             'nombre' => 'required|string|max:255',
             'cantidad' => 'required|numeric',
             'costo' => 'required|numeric',
-            'id_proyecto' => 'required|exists:proyecto,id_proyecto'
+            // 'id_proyecto' => 'required|exists:proyecto,id_proyecto'
         ]);
 
         if(!$validacion->fails()) {
@@ -73,12 +73,19 @@ class MateriaPrimaController extends Controller
             ], 404);
         }
 
-        $proyecto_de_la_materia_prima = $materia_prima->proyecto;
+        $proyecto_de_la_materia_prima = $materia_prima->proyectos;
 
+        if(count($proyecto_de_la_materia_prima) !== 0) {
+            return response()->json([
+                'code' => 200,
+                'data' => $proyecto_de_la_materia_prima
+            ], 200);
+        }
+        
         return response()->json([
-            'code' => 200,
-            'data' => $proyecto_de_la_materia_prima
-        ], 200);
+            'code' => 404,
+            'data' => 'Esta materia prima no se encuentra asignada'
+        ], 404);
     }
 
     public function updateMateriaPrima(Request $request, $id) {
@@ -86,7 +93,7 @@ class MateriaPrimaController extends Controller
             'nombre' => 'required|string|max:255',
             'cantidad' => 'required|numeric',
             'costo' => 'required|numeric',
-            'id_proyecto' => 'required|exists:proyecto,id_proyecto'
+            // 'id_proyecto' => 'required|exists:proyecto,id_proyecto'
         ]);
 
         if($validacion->fails()) {
@@ -109,7 +116,7 @@ class MateriaPrimaController extends Controller
             'nombre' => $request->nombre,
             'cantidad' => $request->cantidad,
             'costo' => $request->costo,
-            'id_proyecto' => $request->id_proyecto,
+            // 'id_proyecto' => $request->id_proyecto,
         ]);
 
         return response()->json([

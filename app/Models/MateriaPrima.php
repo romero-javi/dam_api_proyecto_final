@@ -19,8 +19,8 @@ class MateriaPrima extends Model
         'id_proyecto'
     ];
 
-    public function proyecto()
+    public function proyectos()
     {
-        return $this->belongsTo(Proyecto::class, 'id_proyecto');
+        return $this->belongsToMany(Proyecto::class);
     }
 }

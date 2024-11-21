@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Gasto;
+use App\Models\MateriaPrima;
 use App\Models\Proyecto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 
 class ProyectoController extends Controller
@@ -173,9 +175,101 @@ class ProyectoController extends Controller
 
         $gastos_del_proyecto = $proyecto->gastos;
 
+        if(count($gastos_del_proyecto) !== 0) {
+            return response()->json([
+                'code' => 200,
+                'data' => $gastos_del_proyecto
+            ], 200);
+        }
+
+        return response()->json([
+            'code' => 404,
+            'data' => 'Este proyecto no tiene gastos asignads'
+        ], 404);
+    }   
+
+    public function assignMateriasPrimas(Request $request, $id)
+    {
+        $validacion = Validator::make($request->all(), [
+            'id_materias_primas' => 'required|array',
+            'id_materias_primas.*' => 'exists:materia_prima,id_materia_prima',
+            'fecha_asignacion' => 'required|date'
+        ]);
+
+        if($validacion->fails()) {
+            return response()->json([
+                'code' => 400,
+                'data' => $validacion->messages()
+            ], 400);
+        }
+
+        $proyecto = Proyecto::find($id);
+
+        if (!$proyecto) {
+            return response()->json([
+                'code' => 404,
+                'data' => 'Proyecto no encontrado'
+            ], 404); 
+        }
+        
+        // $proyecto->materias_primas()->attach($request->id_materias_primas, ['fecha_asignacion' => $request->fecha_asignacion]);
+        $proyecto->materias_primas()->syncWithPivotValues($request->id_materias_primas, ['fecha_asignacion' => $request->fecha_asignacion]);
+
         return response()->json([
             'code' => 200,
-            'data' => $gastos_del_proyecto
-        ], 200);
+            'message' => 'Materias primas asignadas con exito al proyecto'
+        ], 200);    
     }
+
+    public function deleteMateriaPrimaAsociada($proyecto_id, $materia_prima_id)
+    {
+        $proyecto = Proyecto::find($proyecto_id);
+
+        if (!$proyecto) {
+            return response()->json([
+                'code' => 404,
+                'data' => 'Proyecto no encontrado'
+            ], 404); 
+        }
+
+        $materia_prima = MateriaPrima::find($materia_prima_id);
+
+        if (!$materia_prima) {
+            return response()->json([
+                'code' => 404,
+                'data' => 'Materia prima no encontrada'
+            ], 404); 
+        }
+        
+        $result = $proyecto->materias_primas()->detach($materia_prima_id);
+
+        return response()->json([
+            'result' => $result
+        ]);    
+    }
+
+    public function getMateriasPrimas($id) {
+        $proyecto = Proyecto::find($id);
+
+        if(!$proyecto) {
+            return response()->json([
+                'code' => 404,
+                'data' => 'Proyecto no encontrado'
+            ], 404);
+        }
+
+        $materias_primas_del_proyecto = $proyecto->materias_primas;
+
+        if(count($materias_primas_del_proyecto) !== 0) {
+            return response()->json([
+                'code' => 200,
+                'data' => $materias_primas_del_proyecto
+            ], 200);
+        }
+
+        return response()->json([
+            'code' => 404,
+            'data' => 'Este proyecto no tiene materias primas asignadas'
+        ], 404);
+    }   
 }

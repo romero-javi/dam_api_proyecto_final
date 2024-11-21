@@ -31,9 +31,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get("/proyectos/{id}", [ProyectoController::class, 'findProyecto']);
     Route::get("/proyectos/{id}/cliente", [ProyectoController::class, 'getcliente']);
     Route::get("/proyectos/{id}/gastos", [ProyectoController::class, 'getGastos']);
+    Route::get("/proyectos/{id}/materias-primas", [ProyectoController::class, 'getMateriasPrimas']);
     Route::post("/proyectos", [ProyectoController::class, 'addProyecto']);
     Route::put("/proyectos/{id}", [ProyectoController::class, 'updateProyecto']);
     Route::delete("/proyectos/{id}", [ProyectoController::class, 'deleteProyecto']);
+    Route::post('/proyectos/{id}/materias-primas', [ProyectoController::class, 'assignMateriasPrimas']);
+    Route::delete('/proyectos/{proyecto_id}/materias-primas/{materia_id}', [ProyectoController::class, 'deleteMateriaPrimaAsociada']);
 
     // Rutas de entidad Maquinaria 
     Route::get('/maquinarias', [MaquinariaController::class, 'selectMaquinarias']);

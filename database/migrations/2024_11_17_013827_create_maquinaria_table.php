@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('materia_prima', function (Blueprint $table) {
-            $table->id('id_materia_prima');
+        Schema::create('maquinaria', function (Blueprint $table) {
+            $table->id('id_maquinaria');
+            $table->('id_proyecto');
             $table->string('nombre');
-            $table->integer('cantidad');
-            $table->decimal('costo', 13, 2);
+            $table->string('tipo');
+            $table->date('fecha_adquisicion');
+            $table->enum('estado', ['activo', 'en mantenimiento', 'inactivo'])->default('activo');
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('materia_prima');
+        Schema::dropIfExists('maquinaria');
     }
 };
