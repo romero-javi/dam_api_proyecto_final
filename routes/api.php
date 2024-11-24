@@ -7,6 +7,7 @@ use App\Http\Controllers\RecursoHumanoController;
 use App\Http\Controllers\MaquinariaController;
 use App\Http\Controllers\MateriaPrimaController;
 use App\Http\Controllers\ProyectoController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -61,8 +62,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/materias-primas/{id}', [MateriaPrimaController::class, 'updateMateriaPrima']);
     Route::delete('/materias-primas/{id}', [MateriaPrimaController::class, 'deleteMateriaPrima']);
 
-    // Obtener Perfil de Usuario
+    // Rutas de entidad Usuario
     Route::get('/user', [AuthController::class, 'getPerfil']);
+    Route::get('/users', [UserController::class, 'getusers']);
 
     // Log out functionality
     Route::post('/logout', [AuthController::class, 'logout']);
