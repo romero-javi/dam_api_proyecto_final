@@ -65,6 +65,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Rutas de entidad Usuario
     Route::get('/user', [AuthController::class, 'getPerfil']);
     Route::get('/users', [UserController::class, 'getusers']);
+    Route::put('/users/{id}', [UserController::class, 'updateUser']);
 
     // Log out functionality
     Route::post('/logout', [AuthController::class, 'logout']);
