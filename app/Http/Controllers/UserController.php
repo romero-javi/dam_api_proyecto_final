@@ -60,4 +60,22 @@ class UserController extends Controller
             'data' => "Usuario actualizado"
         ], 200);
     }
+
+    public function deleteUser($id) {
+        $user =  User::find($id);
+
+        if(!$user) {
+            return response()->json([
+                'code' => 404,
+                'data' => 'User no encontrado'
+            ], 404);
+        }
+        
+        $user->delete();
+
+        return response()->json([
+            'code' => 200,
+            'data' => 'User eliminado'
+	], 200);
+    }
 }
