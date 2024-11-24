@@ -14,13 +14,6 @@ class ProyectoController extends Controller
     public function selectProyectos() {
         $proyectos = Proyecto::all();
 
-        if($proyectos->count() == 0) {
-            return response()->json([
-                'code' => 404,
-                'data' => 'No existen proyectos'
-            ], 404);
-        } 
-
         return response() -> json([
             'code' => 200,
             'data' => $proyectos

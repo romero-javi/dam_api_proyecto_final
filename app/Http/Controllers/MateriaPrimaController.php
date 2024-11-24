@@ -11,13 +11,6 @@ class MateriaPrimaController extends Controller
     public function selectMateriasPrimas() {
         $materias_primas = MateriaPrima::all();
 
-        if($materias_primas->count() == 0) {
-            return response()->json([
-                'code' => 404,
-                'data' => 'No existen materias primas'
-            ], 404);
-        } 
-
         return response() -> json([
             'code' => 200,
             'data' => $materias_primas

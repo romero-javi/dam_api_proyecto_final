@@ -12,13 +12,6 @@ class MaquinariaController extends Controller
     {
         $maquinarias = Maquinaria::all();
 
-        if($maquinarias->count() == 0) {
-            return response() -> json([
-                'code' => 404,
-                'data' => 'No existen Maquinarias'
-            ], 404);
-        }
-        
         return response() -> json([
             'code' => 200,
             'data' => $maquinarias

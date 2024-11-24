@@ -11,13 +11,6 @@ class GastoController extends Controller
     public function selectGastos() {
         $proyectos = Gasto::all();
 
-        if($proyectos->count() == 0) {
-            return response()->json([
-                'code' => 404,
-                'data' => 'No existen gastos'
-            ], 404);
-        } 
-
         return response() -> json([
             'code' => 200,
             'data' => $proyectos

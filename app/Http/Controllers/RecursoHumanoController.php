@@ -11,13 +11,6 @@ class RecursoHumanoController extends Controller
     public function selectRecursosHumanos() {
         $recursos_humanos = RecursoHumano::all();
 
-        if($recursos_humanos->count() == 0) {
-            return response()->json([
-                'code' => 404,
-                'data' => 'No existen recursos humanos'
-            ], 404);
-        } 
-
         return response() -> json([
             'code' => 200,
             'data' => $recursos_humanos

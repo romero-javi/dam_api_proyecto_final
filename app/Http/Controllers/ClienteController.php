@@ -12,13 +12,6 @@ class ClienteController extends Controller
     public function selectClientes() {
         $clientes = Cliente::all();
 
-        if($clientes->count() == 0) {
-            return response()->json([
-                'code' => 404,
-                'data' => 'No existen clientes'
-            ], 404);
-        } 
-
         return response() -> json([
             'code' => 200,
             'data' => $clientes
